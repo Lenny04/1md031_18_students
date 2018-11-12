@@ -12,15 +12,34 @@
 <body>
   <div id="orders">
     <div id="orderList">
-      <div v-for="(order, key) in orders">
-        #{{ key }}: {{ order.orderItems.join(", ") }}
+      <!-- <h3 v-if="orders.length > 0"> Order Confirmation</h3> -->
+      <div v-for="info in orders">
+        <div v-for="i in info">
+          <!-- {{info}} -->
+           <b>#{{i.orderNumber}}</b> <br>
+           {{i.selectedItem.join(", ")}} <br>
+          <!-- <p> <b>Position:</b>  {{i.position.x}}, {{i.position.y}}</p> -->
+          <!-- <p> <b>Customer information:</b>  </p> -->
+          {{i.personInfomation[0]}},
+          {{i.personInfomation[1]}},
+          {{i.personInfomation[2]}},
+          {{i.personInfomation[3]}}
+          <hr>
+        </div>
       </div>
     </div>
-    <div id="dots">
-        <div v-for="(order, key) in orders" v-bind:style="{ left: order.details.x + 'px', top: order.details.y + 'px'}">
-          {{ key }}
+
+
+  <div id="dots">
+    <div v-for="info in orders">
+      <div v-for="i in info">
+        <div v-bind:style="{ left: i.position.x + 'px', top: i.position.y + 'px'}">
+          {{i.orderNumber}}
         </div>
+      </div>
     </div>
   </div>
+  </div>
+</div>
 </body>
 </html>

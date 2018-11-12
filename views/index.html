@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/deli-very.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script type="text/javascript" src="js/menu.js"></script>
+  <script src="/socket.io/socket.io.js" defer></script>
   <script src="js/js_script.js" defer></script>
   <script src="https://vuejs.org/js/vue.js"></script>
   <script src="js/vue_script.js" defer></script>
@@ -10,44 +13,46 @@
   <meta charset="utf-8"/>
 </head>
 <body>
-  <main id="top">
-    <h1>Welcome to Burger Paradise</h1>
-    <img id="restaurant" src="https://cdn-img.instyle.com/sites/default/files/styles/622x350/public/1468939217/071816-Beautiful-Restaurants-LEAD.jpg?itok=oXBJXrIX">
-  </main>
-  <section id="burgerSelection">
-    <h2>{{headLine}}</h2>
-    <h3>{{subTitle}}</h3>
-    <div class="burgers">
-      <div class="oneBurger" v-for="burger in burgers" v-if="burger.stock > 0">
-        {{burger.name}}
-        <img class="picture" :src=burger.img width="200">
-        <ul>
-          <li><a v-if="burger.beef == true">  Beef</a> </li>
-          <li><a v-if="burger.salad == true">  Salad </a> </li>
-          <li><a v-if="burger.bread == true">  Bread </a> </li>
-          <li>Lactose: <a v-if="burger.lactose == true">  <b>{{burger.lactose}}</b> </a> <a v-if="burger.lactose == false"> {{burger.lactose}} </a> </li>
-          <li>Gluten: <a v-if="burger.gluten == true">  <b>{{burger.gluten}}</b> </a> <a v-if="burger.gluten == false"> {{burger.gluten}} </a> </li>
-          <li>kCal: {{burger.kCal}}</li>
-        </ul>
-        <input type="checkbox" id="checkBox">
+  <div id="theWholeBody">
+    <main id="top">
+      <h1>Welcome to Burger Paradise</h1>
+      <img id="restaurant" src="https://cdn-img.instyle.com/sites/default/files/styles/622x350/public/1468939217/071816-Beautiful-Restaurants-LEAD.jpg?itok=oXBJXrIX">
+    </main>
+    <section id="burgerSelection">
+      <h2>{{headLine}}</h2>
+      <h3>{{subTitle}}</h3>
+      <div class="burgers">
+        <div class="oneBurger" v-for="burger in burgers" v-if="burger.stock > 0">
+          {{burger.name}}
+          <img class="picture" :src=burger.img width="200">
+          <ul>
+            <li><a v-if="burger.beef == true">  Beef</a> </li>
+            <li><a v-if="burger.salad == true">  Salad </a> </li>
+            <li><a v-if="burger.bread == true">  Bread </a> </li>
+            <li>Lactose: <a v-if="burger.lactose == true">  <b>{{burger.lactose}}</b> </a> <a v-if="burger.lactose == false"> {{burger.lactose}} </a> </li>
+            <li>Gluten: <a v-if="burger.gluten == true">  <b>{{burger.gluten}}</b> </a> <a v-if="burger.gluten == false"> {{burger.gluten}} </a> </li>
+            <li>kCal: {{burger.kCal}}</li>
+          </ul>
+          <input type="checkbox" id="checkBox"  check="unchecked" v-model="selectedBurgers" :value="burger.name">
+
+        </div>
       </div>
-    </div>
-    <!-- <div id="burgers">
-    <div class="smallBurger">
-    <div class="title">Small burger</div>
-    https://previews.123rf.com/images/rvlsoft/rvlsoft1211/rvlsoft121100009/16138750-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%ED%81%B0-%ED%96%84%EB%B2%84%EA%B1%B0.jpg
-    size:100
-    <div class="picture"><img src="http://vegasburger.hu/wp-content/uploads/2017/01/Sima-Hambi.jpg" width="200"></div>
-    <div class="description">
-    <ul class="list">
-    <li>Beef</li>
-    <li>Tomato</li>
-    <li>Salad</li>
-    <li>Cheese <b> (Lactose free)</b></li>
-    <li>Bread <b>(Gluten)</b></li>
-    <li>kCal: 1000</li>
-  </ul>
-</div>
+      <!-- <div id="burgers">
+      <div class="smallBurger">
+      <div class="title">Small burger</div>
+      https://previews.123rf.com/images/rvlsoft/rvlsoft1211/rvlsoft121100009/16138750-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%ED%81%B0-%ED%96%84%EB%B2%84%EA%B1%B0.jpg
+      size:100
+      <div class="picture"><img src="http://vegasburger.hu/wp-content/uploads/2017/01/Sima-Hambi.jpg" width="200"></div>
+      <div class="description">
+      <ul class="list">
+      <li>Beef</li>
+      <li>Tomato</li>
+      <li>Salad</li>
+      <li>Cheese <b> (Lactose free)</b></li>
+      <li>Bread <b>(Gluten)</b></li>
+      <li>kCal: 1000</li>
+    </ul>
+  </div>
 </div>
 <div class="mediumBurger">
 <div class="title">Medium burger</div>
@@ -86,49 +91,75 @@
   <h3>Customer Information:</h3>
   Information about the Customer!
   <h4>Delivery Information:</h4>
-  <form>
+  <form onsubmit="return false">
     <p>
       <label for="fullname">Full name</label><br>
-      <input type="text" id="fullname" name="fn" required="required" placeholder="First and last name">
+      <input type="text" id="fullname" v-model="fullname" name="fn" required="required" placeholder="First and last name">
     </p>
 
     <p>
       <label for="email">E-mail</label><br>
-      <input type="text" id="email" name="em" required="required" placeholder="Email address">
+      <input type="email" id="email" v-model="email" name="em" required="required" placeholder="Email address">
     </p>
 
-    <p>
-      <label for="street">Street name</label><br>
-      <input type="text" id="street" name="st" required="required" placeholder="Street name">
-    </p>
+    <!-- <p>
+    <label for="street">Street name</label><br>
+    <input type="text" id="street" v-model="email" name="st" required="required" placeholder="Street name">
+  </p>
 
-    <p>
-      <label for="housenumber">House</label><br>
-      <input type="number" id="housenumber" name="h" required="required" placeholder="House number">
-    </p>
+  <p>
+  <label for="housenumber">House</label><br>
+  <input type="number" id="housenumber" v-model="email" name="h" required="required" placeholder="House number">
+</p> -->
 
-    <p>
-      <label for="payment">Payment</label><br>
-      <select id="recipient" name="rcp">
-        <option>Credit card</option>
-        <option>Apple pay</option>
-        <option>Bank transaction</option>
-        <option>Paypal</option>
-      </select>
-    </p>
-    <p>
-      <label for="gender">Gender</label><br>
-      <input type="radio" name="gender" value="male"> Male<br/>
-      <input type="radio" name="gender" value="female"> Female<br/>
-      <input type="radio" name="gender" value="none"> None of the above<br/>
-      <input type="radio" name="gender" value="nothing" checked="checked"> Do not wish to provide
-    </p>
-  </form>
-</section>
-<div id="orders">
-    <button v-on:click="markDone(key)"><img src="https://cdn2.iconfinder.com/data/icons/tasty-bites-icon-set/512/hambruger.png" width="20" height="20">Order burger!</button>
+<p>
+  <label for="payment">Payment</label><br>
+  <select id="recipient" v-model="recipient" name="rcp">
+    <option>Credit card</option>
+    <option>Apple pay</option>
+    <option>Bank transaction</option>
+    <option>Paypal</option>
+  </select>
+</p>
+<p>
+  <label for="gender">Gender</label><br>
+  <input type="radio" v-model="gender" name="gender" value="Male"> Male<br/>
+  <input type="radio" v-model="gender" name="gender" value="Female"> Female<br/>
+  <input type="radio" v-model="gender" name="gender" value="Other"> None of the above<br/>
+  <input type="radio" v-model="gender" name="gender" value="Not provided" checked="checked"> Do not wish to provide
+</p>
+<h2> Click in the map! </h2>
+<a href="/dispatcher" target="_blank">Open dispatcher in new window</a>.
+<div class="view-box">
+  <div id="dots" v-on:click="displayOrder">
+    <div v-bind:style="{ left: position.x + 'px', top: position.y + 'px'}">
+      T
+    </div>
+  </div>
 </div>
+<div id="orders">
+  <button type="submit" v-on:click="markDone"><img src="https://cdn2.iconfinder.com/data/icons/tasty-bites-icon-set/512/hambruger.png" width="20" height="20">Order burger!</button>
+</div>
+</form>
+</section>
+<p v-if="orders.length > 0"><b>Order Confirmation</b></p>
+<div v-for="info in orders">
+  <!-- {{info}} -->
+  <p> <b>Order number:</b>  {{info.orderNumber}}</p>
+  <p> <b>Burger:</b>  {{info.selectedItem.join(", ")}} </p>
+  <p> <b>Position:</b>  {{info.position.x}}, {{info.position.y}}</p>
+  <p> <b>Customer information:</b>  </p>
+  <ul>
+      <li> <b>Name:</b>  {{info.personInfomation[0]}}</li>
+      <li> <b>Email:</b>  {{info.personInfomation[1]}}</li>
+      <li> <b>Payment:</b>  {{info.personInfomation[2]}}</li>
+      <li> <b>Gender:</b>  {{info.personInfomation[3]}}</li>
+  </ul>
+  <hr>
+</div>
+
 <hr>
 <footer>&copy;SPAGHETTI: Website for ordering burgers - Linoj Ravindran</footer>
+</div>
 </body>
 </html>
