@@ -29,8 +29,9 @@
             <li><a v-if="burger.beef == true">  Beef</a> </li>
             <li><a v-if="burger.salad == true">  Salad </a> </li>
             <li><a v-if="burger.bread == true">  Bread </a> </li>
-            <li>Lactose: <a v-if="burger.lactose == true">  <b>{{burger.lactose}}</b> </a> <a v-if="burger.lactose == false"> {{burger.lactose}} </a> </li>
-            <li>Gluten: <a v-if="burger.gluten == true">  <b>{{burger.gluten}}</b> </a> <a v-if="burger.gluten == false"> {{burger.gluten}} </a> </li>
+            <!-- <li>Lactose: <a v-if="burger.lactose == true">  <b>{{burger.lactose}}</b> </a> <a v-if="burger.lactose == false"> {{burger.lactose}} </a> </li> -->
+            <li v-if="burger.lactose"> <b>Contains lactose</b> </li>
+            <li v-if="burger.gluten"><b>Contains gluten</b> </li>
             <li>kCal: {{burger.kCal}}</li>
           </ul>
           <input type="checkbox" id="checkBox"  check="unchecked" v-model="selectedBurgers" :value="burger.name">
@@ -89,19 +90,20 @@
 </section>
 <section id="customerinfo">
   <h3>Customer Information:</h3>
-  Information about the Customer!
+  Information about the customer!
   <h4>Delivery Information:</h4>
   <form onsubmit="return false">
-    <p>
-      <label for="fullname">Full name</label><br>
-      <input type="text" id="fullname" v-model="fullname" name="fn" required="required" placeholder="First and last name">
-    </p>
+    <div>
+      <p>
+        <label for="fullname">Full name</label><br>
+        <input type="text" id="fullname" class="cpInfo" v-model="fullname" name="fn" required="required">
+      </p>
 
-    <p>
-      <label for="email">E-mail</label><br>
-      <input type="email" id="email" v-model="email" name="em" required="required" placeholder="Email address">
-    </p>
-
+      <p>
+        <label for="email">E-mail</label><br>
+        <input type="email" id="email" class="cpInfo" v-model="email" name="em" required="required">
+      </p>
+    </div>
     <!-- <p>
     <label for="street">Street name</label><br>
     <input type="text" id="street" v-model="email" name="st" required="required" placeholder="Street name">
@@ -142,20 +144,22 @@
 </div>
 </form>
 </section>
-<p v-if="orders.length > 0"><b>Order Confirmation</b></p>
-<div v-for="info in orders">
-  <!-- {{info}} -->
-  <p> <b>Order number:</b>  {{info.orderNumber}}</p>
-  <p> <b>Burger:</b>  {{info.selectedItem.join(", ")}} </p>
-  <p> <b>Position:</b>  {{info.position.x}}, {{info.position.y}}</p>
-  <p> <b>Customer information:</b>  </p>
-  <ul>
+<div class="orderConfirmation">
+  <p v-if="orders.length > 0"><b>Order Confirmation</b></p>
+  <div v-for="info in orders">
+    <!-- {{info}} -->
+    <p> <b>Order number:</b>  {{info.orderNumber}}</p>
+    <p> <b>Burger:</b>  {{info.selectedItem.join(", ")}} </p>
+    <p> <b>Position:</b>  {{info.position.x}}, {{info.position.y}}</p>
+    <p> <b>Customer information:</b>  </p>
+    <ul>
       <li> <b>Name:</b>  {{info.personInfomation[0]}}</li>
       <li> <b>Email:</b>  {{info.personInfomation[1]}}</li>
       <li> <b>Payment:</b>  {{info.personInfomation[2]}}</li>
       <li> <b>Gender:</b>  {{info.personInfomation[3]}}</li>
-  </ul>
-  <hr>
+    </ul>
+    <hr>
+  </div>
 </div>
 
 <hr>
