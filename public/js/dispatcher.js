@@ -11,7 +11,7 @@ var vm = new Vue({
   },
   created: function () {
     socket.on('initialize', function (data) {
-      this.orders = [];
+      //this.orders = [];
       (this.orders).push(data.orders);
     }.bind(this));
 
