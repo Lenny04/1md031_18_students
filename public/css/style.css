@@ -1,0 +1,87 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+}
+.ingredients {
+    color: white;
+    font-size: 15px;
+    align: left;
+    font-weight: bold;
+}
+button:hover{
+  background-color: orange;
+  cursor:pointer;
+}
+button{
+  margin-bottom: 30px;
+  margin-left: 30px;
+}
+
+h1{
+  position: absolute;
+  padding-left: 30%;
+  padding-top: 2%;
+}
+#top{
+  margin: 30px;
+  height: 150px;
+  overflow: hidden;
+}
+#restaurant{
+  opacity: 0.3;
+  width: 100%;
+}
+#burgerSelection{
+  margin: 30px;
+  border: 1px dashed white;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+#customerinfo{
+  margin: 30px;
+  border: 1px dashed black;
+  padding-left: 20px;
+}
+.cpInfo{
+  border: 0;
+  border-bottom: 1px solid black;
+  height:30px;
+  font-size: 15px;
+}
+.burgers{
+  width: 69%;
+  display: grid;
+  grid-gap: 30px;
+  grid-template-columns: 1fr 1fr 1fr; /* 1fr 1fr 1fr */
+  grid-template-rows: auto auto auto;
+  margin : 0 auto;
+}
+.oneBurger{
+  /* grid-row: 1 / span 3;  */
+  margin: 0 auto;
+}
+.title{
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 25px;
+}
+ul{
+  text-align: left;
+}
+.orderConfirmation{
+  padding-left: 30px;
+}
+
+
+/* Text box:
+Transition effect:
+transition-property: ...;
+transition-duration: 0.5s; */
+
+
+
+/* bind:class="{gluten: burger.gluten === 1}"
+v-if="burger.gluten" */
